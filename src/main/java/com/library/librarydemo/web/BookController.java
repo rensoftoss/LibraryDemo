@@ -22,7 +22,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(value = "/books")
-class BookController {
+public class BookController {
 
     private final BookService bookService;
 
@@ -32,36 +32,42 @@ class BookController {
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Flux<Book> all() {
-        return this.bookService.findAll();
+    public Flux<BookDto> all() {
+        return this.bookService.findAll().map(BookMapper.INSTANCE::bookToBookDto);
     }
 
-    @PostMapping(value = "")
+    @PostMapping(value = "",
+                 consumes = MediaType.APPLICATION_JSON_VALUE,
+                 produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Mono<Book>> create(@RequestBody BookDto bookDto) {
+    public ResponseEntity<Mono<BookDto>> create(@RequestBody BookDto bookDto) {
         Book book = BookMapper.INSTANCE.bookDtoToBook(bookDto);
-        return ResponseEntity.ok().body(bookService.save(book));
+        return ResponseEntity.ok().body(bookService.save(book).map(BookMapper.INSTANCE::bookToBookDto));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Mono<Book>> get(@PathVariable("id") String id) {
+    public ResponseEntity<Mono<BookDto>> get(@PathVariable("id") String id) {
         return ResponseEntity.ok().body(bookService.findById(id)
+                                                   .map(BookMapper.INSTANCE::bookToBookDto)
                                                    .onErrorResume(e -> {
                                                        throw new BookNotFoundException();
                                                    }));
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}",
+                consumes = MediaType.APPLICATION_JSON_VALUE,
+                produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Mono<Book>> update(@PathVariable("id") String id, @RequestBody BookDto bookDto) {
+    public ResponseEntity<Mono<BookDto>> update(@PathVariable("id") String id, @RequestBody BookDto bookDto) {
         return ResponseEntity.ok().body(bookService.findById(id)
                                                    .map(p -> {
                                                        p.setAuthor(bookDto.getAuthor());
                                                        p.setTitle(bookDto.getTitle());
                                                        return p;
                                                    })
-                                                   .flatMap(this.bookService::save));
+                                                   .flatMap(this.bookService::save)
+                                                   .map(BookMapper.INSTANCE::bookToBookDto));
     }
 
     @DeleteMapping(value = "/{id}")
