@@ -32,9 +32,13 @@ public class BookControllerTest {
     @MockBean
     private BookService bookService;
 
+    private BookDto createBookDto() {
+        return BookDto.builder().author(AUTHOR).title(TITLE).build();
+    }
+
     @Test
     public void shouldGetBook() {
-        BookDto bookDto = BookDto.builder().author(AUTHOR).title(TITLE).build();
+        BookDto bookDto = createBookDto();
 
         when(bookService.findById(any(String.class))).thenReturn(Mono.just(BookMapper.INSTANCE.bookDtoToBook(bookDto)));
 
@@ -44,10 +48,8 @@ public class BookControllerTest {
                  .expectStatus()
                  .isOk()
                  .expectBody()
-                 .jsonPath("author")
-                 .isEqualTo(AUTHOR)
-                 .jsonPath("title")
-                 .isEqualTo(TITLE);
+                 .jsonPath("author").isEqualTo(AUTHOR)
+                 .jsonPath("title").isEqualTo(TITLE);
 
     }
 
@@ -60,7 +62,7 @@ public class BookControllerTest {
 
     @Test
     public void shouldCreate() {
-        BookDto bookDto = BookDto.builder().author(AUTHOR).title(TITLE).build();
+        BookDto bookDto = createBookDto();
 
         when(bookService.save(any(Book.class))).thenReturn(Mono.just(BookMapper.INSTANCE.bookDtoToBook(bookDto)));
 
@@ -71,10 +73,8 @@ public class BookControllerTest {
                  .expectStatus()
                  .isOk()
                  .expectBody()
-                 .jsonPath("author")
-                 .isEqualTo(AUTHOR)
-                 .jsonPath("title")
-                 .isEqualTo(TITLE);
+                 .jsonPath("author").isEqualTo(AUTHOR)
+                 .jsonPath("title").isEqualTo(TITLE);
 
     }
 

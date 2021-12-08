@@ -4,13 +4,12 @@ version: '3.3' # specify docker-compose version
 services:
 
   mongodb:
-    image: mongo:4.2
+    image: mongo:5.0.5
+    container_name: mongodb
     volumes:
       - mongodata:/data/db
     ports:
       - "27017:27017"
-    command: --smallfiles --rest
-#   command: --smallfiles --rest --auth
 
 volumes:
   mongodata:
