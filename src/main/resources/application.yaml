@@ -9,3 +9,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://127.0.0.1:27017/books
+
+application:
+  weather:
+    api-key: 594863a959844e10b64182226210812
+    base-url: https://api.weatherapi.com/v1
