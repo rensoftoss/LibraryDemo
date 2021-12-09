@@ -1,7 +1,7 @@
 # Library Demo
 
-Welcome to the LibraryDemo repository, 
-which is sample application for storing books in MongoDB.
+Welcome to the LibraryDemo repository. This is sample application for storing books in MongoDB.
+Displaying weather information for a given city is also possible with this application.
 
 ## Introduction
 The application uses the following technologies:
@@ -10,6 +10,7 @@ The application uses the following technologies:
 * Spring Boot (Spring WebFlux)
 * REST
 * MongoDB
+* Integration with 3rd party tool to get actual temperature for a given city
 
 ## Compiling the application
 
@@ -36,11 +37,15 @@ To check the compilation by running unit tests:
 
 ## Usage details
 
-Swagger API available after starting the application:
-[Library Swagger API](http://localhost:9090/webjars/swagger-ui/index.html?url=http://localhost:9090/v3/api-docs)
+Using Weather API as a third party tool to get weather information:
+[Weather API](https://www.weatherapi.com/)
 
 The usage of the API is described by the Postman collection:
 [Library Postman Collection](docs/Library.postman_collection.json)
+
+Example requests of service endpoints:
+* `GET http://localhost:9090/books`
+* `GET http://localhost:9090/weather?city=Berlin`
 
 ### Reference Documentation
 
