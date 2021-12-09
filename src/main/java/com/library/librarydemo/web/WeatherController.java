@@ -1,6 +1,7 @@
 package com.library.librarydemo.web;
 
-import com.library.librarydemo.domain.WeatherInfo;
+import com.library.librarydemo.dto.WeatherDto;
+import com.library.librarydemo.mapper.WeatherMapper;
 import com.library.librarydemo.service.WeatherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,9 +27,10 @@ public class WeatherController {
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Mono<WeatherInfo>> getCurrentWeather(@RequestParam("city") String city) {
+    public ResponseEntity<Mono<WeatherDto>> getCurrentWeather(@RequestParam("city") String city) {
         log.info("Get current weather: {}", city);
-        return ResponseEntity.ok().body(weatherService.query(city));
+        return ResponseEntity.ok().body(weatherService.query(city)
+                                                      .map(WeatherMapper.INSTANCE::weatherInfoToWeatherDto));
     }
 
 }

@@ -57,7 +57,7 @@ public class WeatherControllerTest {
                  .expectStatus()
                  .isOk()
                  .expectBody()
-                 .jsonPath("location.name").isEqualTo("Berlin");
+                 .jsonPath("city").isEqualTo("Berlin");
     }
 
 
