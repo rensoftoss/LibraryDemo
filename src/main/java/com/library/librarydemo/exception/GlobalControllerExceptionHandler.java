@@ -26,4 +26,5 @@ public class GlobalControllerExceptionHandler {
     public Mono<String> internalServerError(InternalServerErrorException e) {
         return Mono.just(e.getMessage());
     }
+
 }
