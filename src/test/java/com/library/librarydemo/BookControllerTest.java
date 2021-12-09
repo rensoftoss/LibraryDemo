@@ -50,7 +50,6 @@ public class BookControllerTest {
                  .expectBody()
                  .jsonPath("author").isEqualTo(AUTHOR)
                  .jsonPath("title").isEqualTo(TITLE);
-
     }
 
     @Test
@@ -75,7 +74,6 @@ public class BookControllerTest {
                  .expectBody()
                  .jsonPath("author").isEqualTo(AUTHOR)
                  .jsonPath("title").isEqualTo(TITLE);
-
     }
 
 }

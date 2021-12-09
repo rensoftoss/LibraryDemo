@@ -5,6 +5,7 @@ import com.library.librarydemo.dto.BookDto;
 import com.library.librarydemo.exception.BookNotFoundException;
 import com.library.librarydemo.mapper.BookMapper;
 import com.library.librarydemo.service.BookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(value = "/books")
+@Slf4j
 public class BookController {
 
     private final BookService bookService;
@@ -33,6 +35,7 @@ public class BookController {
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Flux<BookDto> all() {
+        log.info("Get all books");
         return this.bookService.findAll().map(BookMapper.INSTANCE::bookToBookDto);
     }
 
@@ -41,6 +44,7 @@ public class BookController {
                  produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Mono<BookDto>> create(@RequestBody BookDto bookDto) {
+        log.info("Create book: {}", bookDto);
         Book book = BookMapper.INSTANCE.bookDtoToBook(bookDto);
         return ResponseEntity.ok().body(bookService.save(book).map(BookMapper.INSTANCE::bookToBookDto));
     }
@@ -48,6 +52,7 @@ public class BookController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Mono<BookDto>> get(@PathVariable("id") String id) {
+        log.info("Get book: {}", id);
         return ResponseEntity.ok().body(bookService.findById(id)
                                                    .map(BookMapper.INSTANCE::bookToBookDto)
                                                    .onErrorResume(e -> {
@@ -60,6 +65,7 @@ public class BookController {
                 produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Mono<BookDto>> update(@PathVariable("id") String id, @RequestBody BookDto bookDto) {
+        log.info("Update book: {} - {}", id, bookDto);
         return ResponseEntity.ok().body(bookService.findById(id)
                                                    .map(p -> {
                                                        p.setAuthor(bookDto.getAuthor());
@@ -73,6 +79,7 @@ public class BookController {
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Mono<Void> delete(@PathVariable("id") String id) {
+        log.info("Delete book: {}", id);
         return bookService.deleteById(id);
     }
 
