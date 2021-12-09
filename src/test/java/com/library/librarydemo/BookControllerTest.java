@@ -56,7 +56,11 @@ public class BookControllerTest {
     public void shouldGetBookNotFound() {
         when(bookService.findById(any(String.class))).thenThrow(new BookNotFoundException());
 
-        webClient.get().uri("/books/1").exchange().expectStatus().isEqualTo(NOT_FOUND);
+        webClient.get()
+                 .uri("/books/1")
+                 .exchange()
+                 .expectStatus()
+                 .isEqualTo(NOT_FOUND);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.library.librarydemo.service;
 
 import com.library.librarydemo.domain.Book;
+import com.library.librarydemo.exception.BookNotFoundException;
 import com.library.librarydemo.repository.BookRepository;
 
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class BookService {
     }
 
     public Mono<Book> findById(String id) {
-        return books.findById(id);
+        return books.findById(id).switchIfEmpty(Mono.error(new BookNotFoundException()));
     }
 
     public Mono<Void> deleteById(String id) {

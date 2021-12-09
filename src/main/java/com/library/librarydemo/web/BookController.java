@@ -2,7 +2,6 @@ package com.library.librarydemo.web;
 
 import com.library.librarydemo.domain.Book;
 import com.library.librarydemo.dto.BookDto;
-import com.library.librarydemo.exception.BookNotFoundException;
 import com.library.librarydemo.mapper.BookMapper;
 import com.library.librarydemo.service.BookService;
 import lombok.extern.slf4j.Slf4j;
@@ -53,11 +52,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Mono<BookDto>> get(@PathVariable("id") String id) {
         log.info("Get book: {}", id);
-        return ResponseEntity.ok().body(bookService.findById(id)
-                                                   .map(BookMapper.INSTANCE::bookToBookDto)
-                                                   .onErrorResume(e -> {
-                                                       throw new BookNotFoundException();
-                                                   }));
+        return ResponseEntity.ok().body(bookService.findById(id).map(BookMapper.INSTANCE::bookToBookDto));
     }
 
     @PutMapping(value = "/{id}",
